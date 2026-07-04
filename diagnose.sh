@@ -10,6 +10,15 @@ echo "===== 2. Отвечает ли панель локально (127.0.0.1:80
 curl -s -o /dev/null -w "HTTP статус: %{http_code}\n" http://127.0.0.1:8088 || echo "НЕ ОТВЕЧАЕТ"
 
 echo ""
+echo "===== 2.5. Подключён ли конфиг панели в nginx ====="
+if [ -f /etc/nginx/sites-enabled/hyper-host.conf ]; then
+  echo "✅ /etc/nginx/sites-enabled/hyper-host.conf найден"
+else
+  echo "❌ Конфиг hyper-host.conf НЕ найден в sites-enabled — nginx не знает про панель."
+  echo "   Запусти: sudo bash fix_nginx.sh"
+fi
+
+echo ""
 echo "===== 3. Статус nginx ====="
 systemctl status nginx --no-pager | head -n 10
 nginx -t

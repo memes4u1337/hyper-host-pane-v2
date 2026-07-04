@@ -96,6 +96,11 @@ systemctl enable hyper-host
 systemctl restart hyper-host
 
 echo ">>> Настраиваю nginx для домена hyper-host.pw..."
+mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
+if ! grep -q "sites-enabled" /etc/nginx/nginx.conf; then
+  cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak.$(date +%s)
+  sed -i '/http {/a\    include /etc/nginx/sites-enabled/*;' /etc/nginx/nginx.conf
+fi
 cp "$REPO_DIR/nginx/hyper-host.conf" /etc/nginx/sites-available/hyper-host.conf
 ln -sf /etc/nginx/sites-available/hyper-host.conf /etc/nginx/sites-enabled/hyper-host.conf
 rm -f /etc/nginx/sites-enabled/default

@@ -1,0 +1,26 @@
+Название:      Hyper-Host
+Версия:        1.0
+Разработчик:   memes4u1337
+Репозиторий:   https://github.com/memes4u1337/hyper-host-pane-v2
+Домен панели:  hyper-host.pw
+
+Описание:
+Панель управления хостингом собственной разработки.
+Функции: авторизация администратора, мониторинг сервера (CPU/RAM/диск/uptime),
+управление доменами (nginx + Let's Encrypt SSL), управление FTP-аккаунтами (vsftpd).
+
+Стек:
+- Backend: Python 3 / Flask / gunicorn
+- Веб-сервер: nginx (reverse proxy)
+- FTP: vsftpd
+- SSL: certbot (Let's Encrypt)
+- БД панели: sqlite3
+
+Порты, используемые панелью:
+- 8088/tcp  — внутренний порт панели (только localhost, наружу НЕ открывать)
+- 80/tcp    — http (nginx, редирект на https после установки SSL)
+- 443/tcp   — https (nginx)
+- 21/tcp    — FTP control
+- 21100-21110/tcp — FTP passive mode
+
+Powered by memes4u1337
