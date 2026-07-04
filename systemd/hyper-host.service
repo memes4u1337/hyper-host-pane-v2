@@ -1,0 +1,14 @@
+[Unit]
+Description=Hyper-Host control panel
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/hyper-host/app
+Environment="HH_SECRET=CHANGE_ME_RANDOM_SECRET"
+ExecStart=/opt/hyper-host/venv/bin/gunicorn -w 2 -b 127.0.0.1:8088 app:app
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

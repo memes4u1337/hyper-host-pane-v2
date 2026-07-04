@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Домены</h2>
+<div class="card">
+  <form method="post">
+    <label>Домен (например example.com)</label>
+    <input type="text" name="domain" placeholder="example.com" required>
+    <label><input type="checkbox" name="ssl" style="width:auto;display:inline"> Выпустить SSL (Let's Encrypt) — DNS домена уже должен указывать на этот сервер</label>
+    <br><br>
+    <button type="submit">Добавить домен</button>
+  </form>
+</div>
+<div class="card">
+  <table>
+    <tr><th>Домен</th><th>Путь</th><th>SSL</th><th>Создан</th><th></th></tr>
+    {% for d in domains %}
+    <tr>
+      <td>{{ d.domain }}</td>
+      <td>{{ d.docroot }}</td>
+      <td>{{ "✅" if d.ssl else "—" }}</td>
+      <td>{{ d.created_at[:16] }}</td>
+      <td>
+        <form method="post" action="{{ url_for('delete_domain', domain_id=d.id) }}" onsubmit="return confirm('Удалить домен {{ d.domain }}?')">
+          <button class="danger" type="submit">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

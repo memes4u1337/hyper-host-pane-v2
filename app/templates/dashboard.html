@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Обзор сервера</h2>
+<div class="grid">
+  <div class="card">
+    <div class="stat-value">{{ cpu }}%</div>
+    <div class="stat-label">Загрузка CPU</div>
+  </div>
+  <div class="card">
+    <div class="stat-value">{{ mem.percent }}%</div>
+    <div class="stat-label">ОЗУ: {{ (mem.used / (1024**3)) | round(1) }} / {{ (mem.total / (1024**3)) | round(1) }} ГБ</div>
+  </div>
+  <div class="card">
+    <div class="stat-value">{{ disk.percent }}%</div>
+    <div class="stat-label">Диск: {{ (disk.used / (1024**3)) | round(1) }} / {{ (disk.total / (1024**3)) | round(1) }} ГБ</div>
+  </div>
+  <div class="card">
+    <div class="stat-value">{{ uptime }}</div>
+    <div class="stat-label">Аптайм</div>
+  </div>
+  <div class="card">
+    <div class="stat-value">{{ load[0] }}</div>
+    <div class="stat-label">Load average (1 мин)</div>
+  </div>
+  <div class="card">
+    <div class="stat-value">{{ domains_count }}</div>
+    <div class="stat-label">Доменов подключено</div>
+  </div>
+  <div class="card">
+    <div class="stat-value">{{ ftp_count }}</div>
+    <div class="stat-label">FTP-аккаунтов</div>
+  </div>
+</div>
+{% endblock %}
