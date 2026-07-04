@@ -20,7 +20,9 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("HH_SECRET", os.urandom(24).hex())
 
 BRAND = "Hyper-Host"
-FOOTER = "Powered by memes4u1337"
+VERSION = "1.0"
+DEVELOPER = "memes4u1337"
+FOOTER = f"{BRAND} v{VERSION} — Developer: {DEVELOPER}"
 
 
 def get_db():
