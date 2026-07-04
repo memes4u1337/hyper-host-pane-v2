@@ -1,13 +1,6 @@
 #!/bin/bash
-# uninstall_hestia.sh — полное удаление HestiaCP с сервера Ubuntu (v2, надёжная версия)
+# uninstall_hestia.sh — полное удаление HestiaCP с сервера Ubuntu (v3)
 # Запускать от root: sudo bash uninstall_hestia.sh
-#
-# В отличие от первой версии: не падает на первой ошибке (set +e),
-# чистит apt-репозитории Hestia/nginx.org/MariaDB (из-за них nginx мог браться
-# не из Ubuntu, а из левого источника со старыми конфигами доменов),
-# полностью сносит /etc/nginx (включая conf.d/domains — там Hestia хранит вебсайты),
-# удаляет системных пользователей admin/sites, которых создаёт Hestia.
-
 set +e
 
 if [ "$EUID" -ne 0 ]; then
@@ -16,8 +9,10 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo "=== 1. Останавливаю зависшие процессы Hestia ==="
+# ВАЖНО: паттерны ниже намеренно НЕ содержат голое слово "hestia",
+# иначе pkill убьёт сам этот скрипт (его файл называется *_hestia.sh).
 pkill -9 -f "v-add-letsencrypt" 2>/dev/null
-pkill -9 -f "hestia" 2>/dev/null
+pkill -9 -f "/usr/local/hestia" 2>/dev/null
 pkill -9 -f "certbot" 2>/dev/null
 pkill -9 -f "acme" 2>/dev/null
 
@@ -73,7 +68,7 @@ rm -rf /etc/vsftpd.conf /etc/vsftpd* /var/log/vsftpd*
 rm -rf /etc/fail2ban /var/log/fail2ban.log
 rm -rf /etc/letsencrypt /var/lib/letsencrypt /var/log/letsencrypt
 
-echo "=== 8. ГЛАВНОЕ: удаляю apt-репозитории Hestia/nginx.org/MariaDB/PHP(ondrej) ==="
+echo "=== 8. Удаляю apt-репозитории Hestia/nginx.org/MariaDB/PHP(ondrej) ==="
 rm -f /etc/apt/sources.list.d/*hestia*
 rm -f /etc/apt/sources.list.d/*nginx*
 rm -f /etc/apt/sources.list.d/*mariadb*
@@ -104,6 +99,4 @@ grep -r "hestia\|nginx.org\|mariadb" /etc/apt/sources.list.d/ 2>/dev/null
 echo "--- Занятые порты 80/443/8083/3306/53/21: ---"
 ss -tulpn | grep -E ':80|:443|:8083|:3306|:53|:21'
 echo ""
-echo "=== Hestia удалена и apt-репозитории очищены. ==="
-echo "РЕКОМЕНДУЮ ПЕРЕЗАГРУЗИТЬ СЕРВЕР: reboot"
-echo "После перезагрузки ставь Hyper-Host заново: cd ~/hyper-host && sudo bash install.sh"
+echo "=== Готово. Рекомендую перезагрузить сервер: reboot ==="
